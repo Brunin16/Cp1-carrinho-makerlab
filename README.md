@@ -13,7 +13,7 @@
 
 ## 1. Visão geral
 
-Este projeto reúne os materiais e as informações essenciais para o desenvolvimento do carrinho robô, incluindo componentes, medidas e estimativa de custo.
+Este projeto reúne os materiais e as informações essenciais do desenvolvimento do carrinho, incluindo componentes, medidas e custo.
 
 ---
 
