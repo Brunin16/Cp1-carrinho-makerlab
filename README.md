@@ -5,7 +5,9 @@
 | Nome | RM |
 | ---- | -- |
 | Bruno Caputo | 558303 |
-| Lucas | 98344 |
+| Lucas Rodrigues | 98344 |
+| Vinicius Yamashita | 550908 |
+
 
 ---
 
