@@ -1,0 +1,58 @@
+DATASET CP2 - CARRINHO-ROBO (TinyML) - DADOS COLETADOS COM O SENSOR ULTRASSONICO FRONTAL (HC-SR04)
+===============================================================================================
+
+COMO OS DADOS FORAM OBTIDOS
+- Sensor: HC-SR04 frontal do carrinho, lido pelo ESP32 a 10 Hz (uma leitura a cada 100 ms).
+- Coleta: o ESP32 imprimiu no Serial (115200) 'timestamp,dist_cm'; o log bruto (~208 s) foi
+  copiado do Monitor Serial. Foi uma gravacao unica com varias situacoes (obstaculo parado
+  perto, area livre e aproximacoes).
+- Trechos usados: partes do log bruto, listadas na tabela abaixo (timestamps originais aprox.).
+  Trechos com ruido (leituras 0,0 a 0,3 cm e saltos isolados) foram tratados pelo filtro
+  descrito abaixo; trechos caoticos e o restante do platô de ~14 cm (redundante) nao foram usados.
+
+PRE-PROCESSAMENTO (mesma logica da funcao lerDistanciaTratada() do firmware)
+- Sem eco ou >= 200 cm  -> 200 cm (nada a frente)
+- Leitura < 2 cm (impossivel para o HC-SR04) -> repete a ultima leitura valida
+- Mediana das 3 ultimas leituras (remove saltos isolados)
+- O firmware precisa usar o mesmo filtro, para a inferencia ver dados iguais aos do treino.
+
+CLASSES (rotuladas por regras sobre janelas de 2 s = 20 amostras, passo de 0,5 s)
+- obstaculo   : todas as leituras <= 22 cm e desvio padrao <= 3 cm (obstaculo parado perto)
+- livre       : todas as leituras >= 40 cm, sem queda relevante (nada proximo / sem eco)
+- aproximando : queda de >= 15 cm ao longo da janela, comecando em >= 25 cm, de forma
+                gradual e sem subir no final (objeto se aproximando)
+- Janelas que nao atendem a nenhuma regra foram descartadas.
+- Janelas consecutivas da mesma classe foram unidas em um arquivo (ate 15 s).
+
+ARQUIVOS (rotulo = texto antes do primeiro ponto, como o Edge Impulse espera)
+Formato: timestamp,dist_cm  (timestamp em ms, comecando em 0, passo de 100 ms)
+
+arquivo                amostras   seg   trecho do log original (ms, aprox.)
+livre.001.csv                50   5.0   650550 a 655450
+livre.002.csv                20   2.0   655550 a 657450
+obstaculo.001.csv            25   2.5   658550 a 660950
+obstaculo.002.csv            20   2.0   667050 a 668950
+obstaculo.003.csv           150  15.0   675050 a 689950
+aproximando.001.csv          20   2.0   815716 a 817616
+aproximando.002.csv          20   2.0   822716 a 824616
+aproximando.003.csv          25   2.5   827216 a 829616
+aproximando.004.csv          20   2.0   830716 a 832616
+livre.003.csv                20   2.0   835216 a 837116
+aproximando.005.csv          20   2.0   847716 a 849616
+obstaculo.004.csv            65   6.5   740980 a 747380
+livre.004.csv                35   3.5   753435 a 756835
+livre.005.csv                55   5.5   773175 a 778575
+obstaculo.005.csv            60   6.0   794216 a 800116
+
+RESUMO
+- aproximando: 5 arquivos, 105 amostras (10.5 s)
+- livre: 5 arquivos, 180 amostras (18.0 s)
+- obstaculo: 5 arquivos, 320 amostras (32.0 s)
+- total: 15 arquivos, 605 amostras (60.5 s)
+
+LIMITACOES (documentar no README do GitHub)
+- Volume pequeno, principalmente para 'aproximando'. Recomenda-se gravar mais exemplos dessa
+  classe e da classe 'livre' com o firmware atualizado, e juntar aos arquivos deste conjunto.
+- Os rotulos foram atribuidos por regras de distancia/tendencia, nao por anotacao manual
+  durante a gravacao.
+- Obstaculo: arquivos concentrados entre 7 e 19 cm; vale gravar outras distancias e angulos.
