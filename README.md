@@ -127,4 +127,4 @@ O histórico de commits mostra a evolução: dataset → Edge Impulse → firmwa
 
 ## 5. Demonstração
 
-Vídeo: **[ADICIONAR link/arquivo em `video/`]**
+Vídeo: **[Assistir vídeo](https://fiapcom-my.sharepoint.com/:v:/g/personal/rm98344_fiap_com_br/IQAS126o_XQJSa0AM0IhpUPDAY7ehECjvBgDK6PzWg0VZ20?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=2cVuYz)**
